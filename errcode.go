@@ -7,24 +7,28 @@ import (
 )
 
 // An Error and a Code.
-type Error struct {
+type Error interface {
+	error
+	Code() int
+}
+
+type errT struct {
 	code int
 	err  error
 }
 
-// Return the underlying error.
-func (e Error) Error() string {
+func (e errT) Error() string {
 	return e.err.Error()
 }
 
 // Return the associated code.
-func (e Error) Code() int {
+func (e errT) Code() int {
 	return e.code
 }
 
 // Create a new Coded Error.
 func New(code int, f string, args ...interface{}) Error {
-	return Error{
+	return errT{
 		code: code,
 		err:  fmt.Errorf(f, args...),
 	}
@@ -32,5 +36,14 @@ func New(code int, f string, args ...interface{}) Error {
 
 // Add a Code to an existing Error.
 func Add(code int, err error) Error {
-	return Error{code: code, err: err}
+	return errT{code: code, err: err}
+}
+
+// Get a Code from an existing error if it is an Error, else return the
+// provided default code.
+func Get(err error, code int) int {
+	if e, ok := err.(Error); ok {
+		return e.Code()
+	}
+	return code
 }
