@@ -2,4 +2,4 @@ go.errcode [![Build Status](https://secure.travis-ci.org/daaku/go.errcode.png)](
 ==========
 
 Package errcode provides an error type that also includes an integer code:
-Documentation: http://go.pkgdoc.org/github.com/daaku/go.errcode
+Documentation: http://gowalker.org/github.com/daaku/go.errcode
